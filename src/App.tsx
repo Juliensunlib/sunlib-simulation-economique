@@ -300,7 +300,7 @@ function App() {
             color="#378ADD"
             breakdown={results.breakdownBV}
             labels={{
-              direct: 'Autoconso directe (40%)',
+              direct: `Autoconso directe (${Math.round(autoConsoRate * 100)}%)`,
               secondary: 'Énergie BV à 0,10 €/kWh'
             }}
           />

@@ -122,8 +122,8 @@ export function calculateResults(params: SimulatorParams): Results {
 
       let eco_dir_bv: number, eco_bv_net: number, net_bv: number;
       if (inContract) {
-        const dir_bv = Math.min(prod * 0.4, annualConsumption);
-        const sto_bv = Math.min(prod * 0.6, annualConsumption - dir_bv);
+        const dir_bv = Math.min(prod * autoConsoRate, annualConsumption);
+        const sto_bv = Math.min(prod * (1 - autoConsoRate), annualConsumption - dir_bv);
         eco_dir_bv = dir_bv * tarif;
         eco_bv_net = sto_bv * (tarif - FRAIS_BV_KWH);
         net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
