@@ -1,0 +1,226 @@
+import type { SimulatorParams, Results, ScenarioResult, YearBreakdown, Subscription } from '../types/simulator';
+
+const TAUX_FIXE: Record<number, number[]> = {
+  25: [10.00, 10.00, 10.00, 10.60, 10.70, 10.80, 10.84, 10.89, 11.00, 11.10, 11.21, 11.30, 11.35, 11.39, 11.50, 11.60, 11.72, 11.80, 11.85, 11.90, 11.98, 12.10, 12.20, 12.30, 12.40, 12.50],
+  20: [10.30, 10.30, 10.30, 10.90, 11.00, 11.10, 11.14, 11.19, 11.30, 11.40, 11.51, 11.60, 11.65, 11.69, 11.80, 11.90, 12.02, 12.10, 12.15, 12.20, 12.28, 12.40, 12.50, 12.60, 12.70, 12.80],
+  15: [10.50, 10.50, 10.50, 11.10, 11.20, 11.30, 11.34, 11.39, 11.50, 11.60, 11.71, 11.80, 11.85, 11.89, 12.00, 12.10, 12.22, 12.30, 12.35, 12.40, 12.48, 12.60, 12.70, 12.80, 12.90, 13.00],
+  10: [11.20, 11.20, 11.20, 11.80, 11.90, 12.00, 12.04, 12.09, 12.20, 12.30, 12.41, 12.50, 12.55, 12.59, 12.70, 12.80, 12.92, 13.00, 13.05, 13.10, 13.18, 13.30, 13.40, 13.50, 13.60, 13.70]
+};
+
+const TAUX_VAR: Record<number, number[]> = {
+  25: [8.50, 8.50, 8.50, 9.10, 9.20, 9.30, 9.34, 9.39, 9.50, 9.60, 9.71, 9.80, 9.85, 9.89, 10.00, 10.10, 10.22, 10.30, 10.35, 10.40, 10.48, 10.60, 10.70, 10.80, 10.90, 11.00],
+  20: [8.75, 8.75, 8.75, 9.35, 9.45, 9.55, 9.59, 9.64, 9.75, 9.85, 9.96, 10.05, 10.10, 10.14, 10.25, 10.35, 10.47, 10.55, 10.60, 10.65, 10.73, 10.85, 10.95, 11.05, 11.15, 11.25],
+  15: [9.10, 9.10, 9.10, 9.70, 9.80, 9.90, 9.94, 9.99, 10.10, 10.20, 10.31, 10.40, 10.45, 10.49, 10.60, 10.70, 10.82, 10.90, 10.95, 11.00, 11.08, 11.20, 11.30, 11.40, 11.50, 11.60],
+  10: [10.00, 10.00, 10.00, 10.60, 10.70, 10.80, 10.84, 10.89, 11.00, 11.10, 11.21, 11.30, 11.35, 11.39, 11.50, 11.60, 11.72, 11.80, 11.85, 11.90, 11.98, 12.10, 12.20, 12.30, 12.40, 12.50]
+};
+
+const TAUX_FIXE_MAX: Record<number, number> = { 25: 12.50, 20: 12.80, 15: 13.00, 10: 13.70 };
+const TAUX_VAR_MAX: Record<number, number> = { 25: 11.00, 20: 11.25, 15: 11.60, 10: 12.50 };
+
+const PRIX_MAX = [5200, 5500, 6290, 6750, 7542, 8333, 9250, 10083, 10833, 11417, 12000, 12500, 13083, 13667, 14167, 14635, 15170, 15700, 16230, 16765, 17300, 17833, 18380, 18900, 19450, 20000, 20700, 21390, 22080, 22770, 23460, 24150, 24840, 25530, 26220, 26910, 27600, 28290, 28980, 29670, 30360, 31050, 31740, 32430, 33120, 33810, 34500, 35190, 35880, 36570, 37260, 37950, 38640, 39330, 40020, 40710, 41400, 42090, 42780, 43470, 44160, 44850, 45540, 46230, 46920, 47610, 48300, 48990, 49680];
+
+const TARIFS = [0.194, 0.20758, 0.22834, 0.24432, 0.25654, 0.26936, 0.28283, 0.29132, 0.30006, 0.30906, 0.31833, 0.32788, 0.33772, 0.34447, 0.35136, 0.35839, 0.36556, 0.37287, 0.38032, 0.38793, 0.39569, 0.40360, 0.41168, 0.41991, 0.42831];
+
+const PERTE = 0.00459;
+const EVO_ABO = 0.015;
+const TARIF_REVENTE = 0.04;
+const FRAIS_BV_KWH = 0.10;
+const TVA = 1.20;
+const DUREE_CHART = 25;
+
+function getTaux(duration: number, peakPower: number, isFixe: boolean): number {
+  const idx = Math.floor((peakPower - 2) / 0.5);
+  const clampedIdx = Math.max(0, Math.min(idx, 68));
+  const table = isFixe ? TAUX_FIXE : TAUX_VAR;
+  const maxTable = isFixe ? TAUX_FIXE_MAX : TAUX_VAR_MAX;
+  const arr = table[duration];
+  return (clampedIdx < arr.length ? arr[clampedIdx] : maxTable[duration]) / 100;
+}
+
+function calculateMonthlyPayment(capital: number, rate: number, months: number): number {
+  const monthlyRate = rate / 12;
+  return Math.round(capital * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months)) * 100) / 100;
+}
+
+function getPriceLimit(peakPower: number): number {
+  const idx = Math.round((peakPower - 2) / 0.5);
+  const clampedIdx = Math.max(0, Math.min(idx, 68));
+  return PRIX_MAX[clampedIdx];
+}
+
+export function calculateResults(params: SimulatorParams): Results {
+  const {
+    clientType,
+    contractType,
+    duration,
+    installPrice,
+    batteryPrice,
+    peakPower,
+    initialPayment,
+    annualConsumption,
+    pvgisProduction,
+    avgKwhPrice,
+    autoConsoRate
+  } = params;
+
+  const tvaCoef = clientType === 'Particulier' ? TVA : 1.0;
+  const hasBattery = batteryPrice > 0;
+  const priceLimit = getPriceLimit(peakPower);
+  const outOfRange = installPrice > priceLimit;
+
+  let subscriptionPV: Subscription | null = null;
+  let subscriptionBattery: Subscription | null = null;
+
+  if (!outOfRange) {
+    const capital = Math.max(0, installPrice - initialPayment);
+    const ratePV = getTaux(duration, peakPower, contractType === 'Fixe');
+    const monthlyPV_HT = calculateMonthlyPayment(capital, ratePV, duration * 12);
+    subscriptionPV = {
+      monthlyHT: monthlyPV_HT,
+      monthly: monthlyPV_HT * tvaCoef,
+      annual: monthlyPV_HT * tvaCoef * 12
+    };
+
+    if (hasBattery) {
+      const rateBP = getTaux(10, peakPower, contractType === 'Fixe');
+      const monthlyBP_HT = calculateMonthlyPayment(batteryPrice, rateBP, 120);
+      subscriptionBattery = {
+        monthlyHT: monthlyBP_HT,
+        monthly: monthlyBP_HT * tvaCoef,
+        annual: monthlyBP_HT * tvaCoef * 12
+      };
+    }
+  }
+
+  const prod0 = peakPower * pvgisProduction;
+  const scale = avgKwhPrice / 0.194;
+
+  const scenarioBV: ScenarioResult = { totalSavings: 0, breakEvenYear: null, yearlyData: [], cumulativeData: [], colors: [] };
+  const scenarioPV: ScenarioResult = { totalSavings: 0, breakEvenYear: null, yearlyData: [], cumulativeData: [], colors: [] };
+  const scenarioBP: ScenarioResult = { totalSavings: 0, breakEvenYear: null, yearlyData: [], cumulativeData: [], colors: [] };
+
+  let breakdownBV: YearBreakdown = { directConsumption: 0, virtualBatteryOrResale: 0, subscriptionCost: 0, batteryCost: 0, netSavings: 0 };
+  let breakdownPV: YearBreakdown = { directConsumption: 0, virtualBatteryOrResale: 0, subscriptionCost: 0, batteryCost: 0, netSavings: 0 };
+  let breakdownBP: YearBreakdown = { directConsumption: 0, virtualBatteryOrResale: 0, subscriptionCost: 0, batteryCost: 0, netSavings: 0 };
+
+  let cumBV = 0, cumPV = 0, cumBP = 0;
+
+  const COL_BV = 'rgba(55,138,221,0.85)', COL_BV_POST = 'rgba(55,138,221,0.28)';
+  const COL_PV = 'rgba(29,158,117,0.85)', COL_PV_POST = 'rgba(29,158,117,0.28)';
+  const COL_BP = 'rgba(216,90,48,0.85)', COL_BP_POST = 'rgba(216,90,48,0.28)';
+
+  if (!outOfRange && subscriptionPV) {
+    for (let y = 1; y <= DUREE_CHART; y++) {
+      const ti = Math.min(y, 25) - 1;
+      const tarif = TARIFS[ti] * scale;
+      const prod = prod0 * Math.pow(1 - PERTE, y - 1);
+      const inContract = y <= duration;
+      const abo_pv_ann = inContract ? subscriptionPV.monthly * tvaCoef * 12 * Math.pow(1 + EVO_ABO, y - 1) : 0;
+      const abo_bp_ann = hasBattery && subscriptionBattery && y <= 10
+        ? subscriptionBattery.monthly * tvaCoef * 12 * Math.pow(1 + EVO_ABO, y - 1)
+        : 0;
+
+      let eco_dir_bv: number, eco_bv_net: number, net_bv: number;
+      if (inContract) {
+        const dir_bv = Math.min(prod * 0.4, annualConsumption);
+        const sto_bv = Math.min(prod * 0.6, annualConsumption - dir_bv);
+        eco_dir_bv = dir_bv * tarif;
+        eco_bv_net = sto_bv * (tarif - FRAIS_BV_KWH);
+        net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
+      } else {
+        const dir_bv2 = Math.min(prod * autoConsoRate, annualConsumption);
+        const sur_bv2 = Math.max(0, prod - dir_bv2);
+        eco_dir_bv = dir_bv2 * tarif;
+        eco_bv_net = 0;
+        net_bv = eco_dir_bv + sur_bv2 * TARIF_REVENTE;
+      }
+
+      const dir_pv = Math.min(prod * autoConsoRate, annualConsumption);
+      const sur_pv = Math.max(0, prod - dir_pv);
+      const eco_dir_pv = dir_pv * tarif;
+      const eco_rev_pv = sur_pv * TARIF_REVENTE;
+      const net_pv = eco_dir_pv + eco_rev_pv - abo_pv_ann;
+
+      const dir_bp = Math.min(prod * 0.65, annualConsumption);
+      const sur_bp = Math.max(0, prod - dir_bp);
+      const eco_dir_bp = dir_bp * tarif;
+      const eco_rev_bp = sur_bp * TARIF_REVENTE;
+      const net_bp = eco_dir_bp + eco_rev_bp - abo_pv_ann - abo_bp_ann;
+
+      cumBV += net_bv;
+      cumPV += net_pv;
+      cumBP += net_bp;
+
+      scenarioBV.yearlyData.push(Math.round(net_bv));
+      scenarioBV.cumulativeData.push(Math.round(cumBV));
+      scenarioBV.colors.push(inContract ? COL_BV : COL_BV_POST);
+
+      scenarioPV.yearlyData.push(Math.round(net_pv));
+      scenarioPV.cumulativeData.push(Math.round(cumPV));
+      scenarioPV.colors.push(inContract ? COL_PV : COL_PV_POST);
+
+      scenarioBP.yearlyData.push(Math.round(net_bp));
+      scenarioBP.cumulativeData.push(Math.round(cumBP));
+      scenarioBP.colors.push(inContract ? COL_BP : COL_BP_POST);
+
+      if (scenarioBV.breakEvenYear === null && cumBV >= 0) scenarioBV.breakEvenYear = y;
+      if (scenarioPV.breakEvenYear === null && cumPV >= 0) scenarioPV.breakEvenYear = y;
+      if (scenarioBP.breakEvenYear === null && cumBP >= 0) scenarioBP.breakEvenYear = y;
+
+      if (y === duration) {
+        scenarioBV.totalSavings = cumBV;
+        scenarioPV.totalSavings = cumPV;
+        scenarioBP.totalSavings = cumBP;
+      }
+
+      if (y === 1) {
+        breakdownBV = {
+          directConsumption: eco_dir_bv,
+          virtualBatteryOrResale: eco_bv_net,
+          subscriptionCost: -abo_pv_ann,
+          batteryCost: 0,
+          netSavings: net_bv
+        };
+        breakdownPV = {
+          directConsumption: eco_dir_pv,
+          virtualBatteryOrResale: eco_rev_pv,
+          subscriptionCost: -abo_pv_ann,
+          batteryCost: 0,
+          netSavings: net_pv
+        };
+        breakdownBP = {
+          directConsumption: eco_dir_bp,
+          virtualBatteryOrResale: eco_rev_bp,
+          subscriptionCost: -abo_pv_ann,
+          batteryCost: -abo_bp_ann,
+          netSavings: net_bp
+        };
+      }
+    }
+  }
+
+  return {
+    subscriptionPV,
+    subscriptionBattery,
+    scenarioBV,
+    scenarioPV,
+    scenarioBP,
+    breakdownBV,
+    breakdownPV,
+    breakdownBP,
+    outOfRange
+  };
+}
+
+export function formatCurrency(value: number): string {
+  return value.toFixed(2).replace('.', ',') + ' €';
+}
+
+export function formatNumber(value: number): string {
+  return Math.round(value).toLocaleString('fr-FR');
+}
+
+export function formatSavings(value: number): string {
+  const rounded = Math.round(value);
+  return (rounded >= 0 ? '+' : '') + rounded.toLocaleString('fr-FR') + ' €';
+}
