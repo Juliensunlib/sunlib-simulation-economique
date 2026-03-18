@@ -120,6 +120,16 @@ function App() {
             suffix="€"
           />
           <Slider
+            label="Puissance crête"
+            value={peakPower}
+            displayValue={peakPower + ' kWc'}
+            min={1}
+            max={200}
+            step={0.5}
+            onChange={setPeakPower}
+            suffix="kWc"
+          />
+          <Slider
             label="Prix batterie physique (HT)"
             value={batteryPrice}
             displayValue={batteryPrice === 0 ? 'Aucune' : formatNumber(batteryPrice) + ' €'}
@@ -141,16 +151,6 @@ function App() {
               suffix="kWh"
             />
           )}
-          <Slider
-            label="Puissance crête"
-            value={peakPower}
-            displayValue={peakPower + ' kWc'}
-            min={1}
-            max={200}
-            step={0.5}
-            onChange={setPeakPower}
-            suffix="kWc"
-          />
           <Slider
             label="Versement initial (HT)"
             value={initialPayment}
