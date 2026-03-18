@@ -128,11 +128,11 @@ export function calculateResults(params: SimulatorParams): Results {
         eco_bv_net = sto_bv * (tarif - FRAIS_BV_KWH);
         net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
       } else {
-        const dir_bv2 = Math.min(prod * autoConsoRate, annualConsumption);
-        const sur_bv2 = Math.max(0, prod - dir_bv2);
+        const dir_bv2 = Math.min(prod, annualConsumption);
+        const sur_bv2 = Math.max(0, prod - annualConsumption);
         eco_dir_bv = dir_bv2 * tarif;
-        eco_bv_net = 0;
-        net_bv = eco_dir_bv + sur_bv2 * TARIF_REVENTE;
+        eco_bv_net = sur_bv2 * TARIF_REVENTE;
+        net_bv = eco_dir_bv + eco_bv_net;
       }
 
       const dir_pv = Math.min(prod * autoConsoRate, annualConsumption);
