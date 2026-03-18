@@ -21,32 +21,42 @@ interface ChartComponentProps {
   scenarioPV: ScenarioResult;
   scenarioBP: ScenarioResult;
   hasBattery: boolean;
+  visibleDatasets: {
+    bv: boolean;
+    pv: boolean;
+    bp: boolean;
+  };
 }
 
-export function ChartComponent({ mode, duration, scenarioBV, scenarioPV, scenarioBP, hasBattery }: ChartComponentProps) {
+export function ChartComponent({ mode, duration, scenarioBV, scenarioPV, scenarioBP, hasBattery, visibleDatasets }: ChartComponentProps) {
   const chartRef = useRef<ChartJS<'bar'>>(null);
 
   const isCumulative = mode === 'cumul';
   const labels = Array.from({ length: 25 }, (_, i) => `An ${i + 1}`);
 
-  const datasets = [
-    {
+  const datasets = [];
+
+  if (visibleDatasets.bv) {
+    datasets.push({
       label: 'PV+BV',
       data: isCumulative ? scenarioBV.cumulativeData : scenarioBV.yearlyData,
       backgroundColor: scenarioBV.colors,
       borderRadius: 4,
       borderSkipped: false as const
-    },
-    {
+    });
+  }
+
+  if (visibleDatasets.pv) {
+    datasets.push({
       label: 'PV Seul',
       data: isCumulative ? scenarioPV.cumulativeData : scenarioPV.yearlyData,
       backgroundColor: scenarioPV.colors,
       borderRadius: 4,
       borderSkipped: false as const
-    }
-  ];
+    });
+  }
 
-  if (hasBattery) {
+  if (hasBattery && visibleDatasets.bp) {
     datasets.push({
       label: 'PV+BP',
       data: isCumulative ? scenarioBP.cumulativeData : scenarioBP.yearlyData,

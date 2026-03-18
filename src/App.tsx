@@ -23,6 +23,18 @@ function App() {
   const [avgKwhPrice, setAvgKwhPrice] = useState(0.194);
   const [autoConsoRate, setAutoConsoRate] = useState(0.40);
   const [chartMode, setChartMode] = useState<ChartMode>('cumul');
+  const [visibleDatasets, setVisibleDatasets] = useState({
+    bv: true,
+    pv: true,
+    bp: true
+  });
+
+  const toggleDataset = (dataset: 'bv' | 'pv' | 'bp') => {
+    setVisibleDatasets(prev => ({
+      ...prev,
+      [dataset]: !prev[dataset]
+    }));
+  };
 
   const params: SimulatorParams = {
     clientType,
@@ -272,18 +284,28 @@ function App() {
         </div>
 
         <div className="flex flex-wrap gap-3.5 text-xs text-gray-500 mb-2.5">
-          <span className="flex items-center gap-1.5">
+          <button
+            onClick={() => toggleDataset('bv')}
+            className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!visibleDatasets.bv ? 'opacity-35' : ''}`}
+          >
             <span className="w-3 h-3 rounded bg-[#378ADD] flex-shrink-0"></span>
             PV + Batt. Virtuelle
-          </span>
-          <span className="flex items-center gap-1.5">
+          </button>
+          <button
+            onClick={() => toggleDataset('pv')}
+            className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!visibleDatasets.pv ? 'opacity-35' : ''}`}
+          >
             <span className="w-3 h-3 rounded bg-[#1D9E75] flex-shrink-0"></span>
             PV Seul
-          </span>
-          <span className={`flex items-center gap-1.5 ${!hasBattery ? 'opacity-35' : ''}`}>
+          </button>
+          <button
+            onClick={() => toggleDataset('bp')}
+            className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!hasBattery || !visibleDatasets.bp ? 'opacity-35' : ''}`}
+            disabled={!hasBattery}
+          >
             <span className="w-3 h-3 rounded bg-[#D85A30] flex-shrink-0"></span>
             PV + Batt. Physique
-          </span>
+          </button>
           <span className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded bg-gray-300 flex-shrink-0"></span>
             Après fin contrat
@@ -297,6 +319,7 @@ function App() {
           scenarioPV={results.scenarioPV}
           scenarioBP={results.scenarioBP}
           hasBattery={hasBattery}
+          visibleDatasets={visibleDatasets}
         />
 
         <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2.5">
