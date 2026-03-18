@@ -50,9 +50,9 @@
   .print-header h1 {
     font-size: 1.25rem !important;
     margin-bottom: 0.25rem !important;
-    background: linear-gradient(to right, #13A3AC, #60B830);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #13A3AC !important;
+    background: none !important;
+    -webkit-text-fill-color: #13A3AC !important;
   }
 
   .print-header p {
