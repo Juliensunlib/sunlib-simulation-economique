@@ -56,8 +56,10 @@ export function calculateResults(params: SimulatorParams): Results {
     clientType,
     contractType,
     duration,
+    batteryDuration,
     installPrice,
     batteryPrice,
+    batteryCapacity,
     peakPower,
     initialPayment,
     annualConsumption,
@@ -70,6 +72,10 @@ export function calculateResults(params: SimulatorParams): Results {
   const hasBattery = batteryPrice > 0;
   const priceLimit = getPriceLimit(peakPower);
   const outOfRange = installPrice > priceLimit;
+
+  const MAX_PRICE_PER_KWH = 1000;
+  const pricePerKwh = batteryCapacity > 0 ? batteryPrice / batteryCapacity : 0;
+  const batteryPriceExceeded = hasBattery && pricePerKwh > MAX_PRICE_PER_KWH;
 
   let subscriptionPV: Subscription | null = null;
   let subscriptionBattery: Subscription | null = null;
@@ -84,9 +90,9 @@ export function calculateResults(params: SimulatorParams): Results {
       annual: monthlyPV_HT * tvaCoef * 12
     };
 
-    if (hasBattery) {
-      const rateBP = getTaux(10, peakPower, contractType === 'Fixe');
-      const monthlyBP_HT = calculateMonthlyPayment(batteryPrice, rateBP, 120);
+    if (hasBattery && !batteryPriceExceeded) {
+      const rateBP = getTaux(batteryDuration, peakPower, contractType === 'Fixe');
+      const monthlyBP_HT = calculateMonthlyPayment(batteryPrice, rateBP, batteryDuration * 12);
       subscriptionBattery = {
         monthlyHT: monthlyBP_HT,
         monthly: monthlyBP_HT * tvaCoef,
@@ -119,7 +125,7 @@ export function calculateResults(params: SimulatorParams): Results {
       const prod = prod0;
       const inContract = y <= duration;
       const abo_pv_ann = inContract ? subscriptionPV.monthly * tvaCoef * 12 * Math.pow(1 + EVO_ABO, y - 1) : 0;
-      const abo_bp_ann = hasBattery && subscriptionBattery && y <= 10
+      const abo_bp_ann = hasBattery && subscriptionBattery && y <= batteryDuration
         ? subscriptionBattery.monthly * tvaCoef * 12 * Math.pow(1 + EVO_ABO, y - 1)
         : 0;
 

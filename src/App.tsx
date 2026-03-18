@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import type { ClientType, ContractType, Duration, ChartMode, SimulatorParams } from './types/simulator';
+import type { ClientType, ContractType, Duration, BatteryDuration, ChartMode, SimulatorParams } from './types/simulator';
 import { calculateResults, formatNumber, formatCurrency } from './utils/calculations';
 import { Slider } from './components/Slider';
 import { ToggleButton } from './components/ToggleButton';
@@ -14,8 +14,10 @@ function App() {
   const [clientType, setClientType] = useState<ClientType>('Particulier');
   const [contractType, setContractType] = useState<ContractType>('Fixe');
   const [duration, setDuration] = useState<Duration>(25);
+  const [batteryDuration, setBatteryDuration] = useState<BatteryDuration>(10);
   const [installPrice, setInstallPrice] = useState(6290);
   const [batteryPrice, setBatteryPrice] = useState(2500);
+  const [batteryCapacity, setBatteryCapacity] = useState(5);
   const [peakPower, setPeakPower] = useState(3);
   const [initialPayment, setInitialPayment] = useState(0);
   const [annualConsumption, setAnnualConsumption] = useState(10000);
@@ -40,8 +42,10 @@ function App() {
     clientType,
     contractType,
     duration,
+    batteryDuration,
     installPrice,
     batteryPrice,
+    batteryCapacity,
     peakPower,
     initialPayment,
     annualConsumption,
@@ -125,6 +129,18 @@ function App() {
             onChange={setBatteryPrice}
             suffix="€"
           />
+          {hasBattery && (
+            <Slider
+              label="Capacité batterie (kWh)"
+              value={batteryCapacity}
+              displayValue={formatNumber(batteryCapacity) + ' kWh'}
+              min={1}
+              max={20}
+              step={0.5}
+              onChange={setBatteryCapacity}
+              suffix="kWh"
+            />
+          )}
           <Slider
             label="Puissance crête"
             value={peakPower}
@@ -163,10 +179,35 @@ function App() {
           </div>
         </div>
 
+        {hasBattery && (
+          <div className="mb-4">
+            <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-0 mb-2.5">
+              Durée abonnement Batterie
+            </div>
+            <div className="grid grid-cols-2 gap-2 max-w-[190px]">
+              {[10, 15].map((d) => (
+                <DurationButton
+                  key={d}
+                  years={d}
+                  active={batteryDuration === d}
+                  onClick={() => setBatteryDuration(d as BatteryDuration)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         {results.outOfRange && (
           <div className="bg-[#fdf0ec] border border-[#f5c9b8] text-[#c04a20] rounded-xl px-3.5 py-2.5 text-xs mb-3 flex items-start gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span>Prix HT dépasse le plafond autorisé pour cette puissance — Hors tarif SunLib</span>
+          </div>
+        )}
+
+        {hasBattery && batteryCapacity > 0 && (batteryPrice / batteryCapacity) > 1000 && (
+          <div className="bg-[#fdf0ec] border border-[#f5c9b8] text-[#c04a20] rounded-xl px-3.5 py-2.5 text-xs mb-3 flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>Prix de la batterie ({formatNumber(batteryPrice / batteryCapacity)} €/kWh) dépasse le maximum autorisé (1000 €/kWh)</span>
           </div>
         )}
 
@@ -187,7 +228,7 @@ function App() {
             subscription={results.subscriptionBattery}
             subtitle={
               hasBattery && results.subscriptionBattery
-                ? `${formatNumber(results.subscriptionBattery.annual)} € · durée 10 ans`
+                ? `${formatNumber(results.subscriptionBattery.annual)} € · durée ${batteryDuration} ans`
                 : 'Aucune batterie physique'
             }
             tvaLabel={tvaLabel}

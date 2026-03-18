@@ -1,14 +1,17 @@
 export type ClientType = 'Particulier' | 'Pro';
 export type ContractType = 'Fixe' | 'Variable';
 export type Duration = 10 | 15 | 20 | 25;
+export type BatteryDuration = 10 | 15;
 export type ChartMode = 'cumul' | 'annuel';
 
 export interface SimulatorParams {
   clientType: ClientType;
   contractType: ContractType;
   duration: Duration;
+  batteryDuration: BatteryDuration;
   installPrice: number;
   batteryPrice: number;
+  batteryCapacity: number;
   peakPower: number;
   initialPayment: number;
   annualConsumption: number;
