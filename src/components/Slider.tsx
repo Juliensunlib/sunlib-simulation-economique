@@ -69,7 +69,7 @@ export function Slider({ label, value, displayValue, min, max, step, onChange, s
               setInputValue(newVal.toString());
             }
           }}
-          className="flex-1 h-1 accent-[#378ADD] cursor-pointer"
+          className="flex-1 h-1 accent-[#13A3AC] cursor-pointer"
         />
         <div className="relative">
           <input
@@ -79,7 +79,7 @@ export function Slider({ label, value, displayValue, min, max, step, onChange, s
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             onKeyDown={handleKeyDown}
-            className="w-28 px-3 py-1.5 text-sm font-semibold text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#378ADD] focus:border-transparent"
+            className="w-28 px-3 py-1.5 text-sm font-semibold text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#13A3AC] focus:border-transparent"
           />
           {suffix && (
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500 pointer-events-none">

@@ -56,10 +56,27 @@ function App() {
   const showHT = clientType === 'Particulier';
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5] py-6 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#13A3AC] to-[#3CAE68] py-6 px-4">
       <div className="max-w-[960px] mx-auto bg-white rounded-2xl p-8 shadow-lg">
-        <h1 className="text-xl font-semibold mb-1">Simulateur Rentabilité PV — SunLib</h1>
-        <p className="text-[13px] text-gray-500 mb-6">Comparez les 3 scénarios d'abonnement sur 25 ans</p>
+        <div className="flex items-center gap-4 mb-6">
+          <svg viewBox="0 0 100 100" className="w-16 h-16" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="sunlibGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: '#13A3AC', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: '#60B830', stopOpacity: 1 }} />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="25" fill="url(#sunlibGradient)" />
+            <path d="M50 10 L50 20 M50 80 L50 90 M10 50 L20 50 M80 50 L90 50 M20 20 L28 28 M72 72 L80 80 M20 80 L28 72 M72 28 L80 20"
+                  stroke="url(#sunlibGradient)" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div>
+            <h1 className="text-xl font-semibold mb-1 bg-gradient-to-r from-[#13A3AC] to-[#60B830] bg-clip-text text-transparent">
+              Calculatrice SunLib
+            </h1>
+            <p className="text-[13px] text-gray-500">Comparez les 3 scénarios d'abonnement sur 25 ans</p>
+          </div>
+        </div>
 
         <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5">
           Profil client & contrat
@@ -265,8 +282,8 @@ function App() {
             onClick={() => setChartMode('cumul')}
             className={`px-3 py-1 text-xs border rounded-lg transition-all ${
               chartMode === 'cumul'
-                ? 'bg-gray-100 text-gray-900 border-gray-400 font-semibold'
-                : 'bg-transparent text-gray-500 border-gray-300 hover:border-gray-400'
+                ? 'bg-gradient-to-r from-[#13A3AC] to-[#3CAE68] text-white border-[#13A3AC] font-semibold'
+                : 'bg-transparent text-gray-500 border-gray-300 hover:border-[#13A3AC]'
             }`}
           >
             Économies cumulées
@@ -275,8 +292,8 @@ function App() {
             onClick={() => setChartMode('annuel')}
             className={`px-3 py-1 text-xs border rounded-lg transition-all ${
               chartMode === 'annuel'
-                ? 'bg-gray-100 text-gray-900 border-gray-400 font-semibold'
-                : 'bg-transparent text-gray-500 border-gray-300 hover:border-gray-400'
+                ? 'bg-gradient-to-r from-[#13A3AC] to-[#3CAE68] text-white border-[#13A3AC] font-semibold'
+                : 'bg-transparent text-gray-500 border-gray-300 hover:border-[#13A3AC]'
             }`}
           >
             Économies annuelles
@@ -288,14 +305,14 @@ function App() {
             onClick={() => toggleDataset('bv')}
             className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!visibleDatasets.bv ? 'opacity-35' : ''}`}
           >
-            <span className="w-3 h-3 rounded bg-[#378ADD] flex-shrink-0"></span>
+            <span className="w-3 h-3 rounded bg-[#13A3AC] flex-shrink-0"></span>
             PV + Batt. Virtuelle
           </button>
           <button
             onClick={() => toggleDataset('pv')}
             className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!visibleDatasets.pv ? 'opacity-35' : ''}`}
           >
-            <span className="w-3 h-3 rounded bg-[#1D9E75] flex-shrink-0"></span>
+            <span className="w-3 h-3 rounded bg-[#60B830] flex-shrink-0"></span>
             PV Seul
           </button>
           <button
@@ -303,7 +320,7 @@ function App() {
             className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!hasBattery || !visibleDatasets.bp ? 'opacity-35' : ''}`}
             disabled={!hasBattery}
           >
-            <span className="w-3 h-3 rounded bg-[#D85A30] flex-shrink-0"></span>
+            <span className="w-3 h-3 rounded bg-[#0EA3B4] flex-shrink-0"></span>
             PV + Batt. Physique
           </button>
           <span className="flex items-center gap-1.5">
@@ -328,7 +345,7 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
           <DecompositionCard
             title="PV + Batt. Virtuelle"
-            color="#378ADD"
+            color="#13A3AC"
             breakdown={results.breakdownBV}
             labels={{
               direct: `Autoconso directe (${Math.round(autoConsoRate * 100)}%)`,
@@ -337,7 +354,7 @@ function App() {
           />
           <DecompositionCard
             title="PV Seul"
-            color="#1D9E75"
+            color="#60B830"
             breakdown={results.breakdownPV}
             labels={{
               direct: 'Autoconso directe',
@@ -346,7 +363,7 @@ function App() {
           />
           <DecompositionCard
             title="PV + Batt. Physique"
-            color="#D85A30"
+            color="#0EA3B4"
             breakdown={results.breakdownBP}
             labels={{
               direct: 'Autoconso directe (65%)',
