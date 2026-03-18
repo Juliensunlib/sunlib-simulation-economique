@@ -101,7 +101,7 @@ function App() {
             value={peakPower}
             displayValue={peakPower + ' kWc'}
             min={1}
-            max={36}
+            max={200}
             step={0.5}
             onChange={setPeakPower}
             suffix="kWc"
@@ -183,8 +183,8 @@ function App() {
             value={annualConsumption}
             displayValue={formatNumber(annualConsumption) + ' kWh'}
             min={2000}
-            max={20000}
-            step={500}
+            max={200000}
+            step={1000}
             onChange={setAnnualConsumption}
             suffix="kWh"
           />
@@ -213,7 +213,7 @@ function App() {
             value={autoConsoRate}
             displayValue={Math.round(autoConsoRate * 100) + ' %'}
             min={0.20}
-            max={0.80}
+            max={1.00}
             step={0.05}
             onChange={setAutoConsoRate}
             suffix="%"

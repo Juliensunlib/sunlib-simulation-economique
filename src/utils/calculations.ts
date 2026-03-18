@@ -43,6 +43,9 @@ function calculateMonthlyPayment(capital: number, rate: number, months: number):
 }
 
 function getPriceLimit(peakPower: number): number {
+  if (peakPower > 36) {
+    return Infinity;
+  }
   const idx = Math.round((peakPower - 2) / 0.5);
   const clampedIdx = Math.max(0, Math.min(idx, 68));
   return PRIX_MAX[clampedIdx];
