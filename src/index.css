@@ -183,7 +183,15 @@
 
   .bg-gradient-to-br,
   .bg-gradient-to-r {
-    background: white !important;
+    background: linear-gradient(to right, #13A3AC, #3CAE68) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  button.bg-gradient-to-r {
+    background: linear-gradient(to right, #13A3AC, #3CAE68) !important;
+    color: white !important;
+    border-color: #13A3AC !important;
   }
 
   .rounded-xl,
