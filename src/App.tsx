@@ -13,11 +13,11 @@ import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 function App() {
   const [clientType, setClientType] = useState<ClientType>('Particulier');
-  const [contractType, setContractType] = useState<ContractType>('Fixe');
+  const [contractType, setContractType] = useState<ContractType>('Variable');
   const [duration, setDuration] = useState<Duration>(25);
   const [batteryDuration, setBatteryDuration] = useState<BatteryDuration>(10);
   const [installPrice, setInstallPrice] = useState(6290);
-  const [batteryPrice, setBatteryPrice] = useState(2500);
+  const [batteryPrice, setBatteryPrice] = useState(0);
   const [batteryCapacity, setBatteryCapacity] = useState(5);
   const [peakPower, setPeakPower] = useState(3);
   const [initialPayment, setInitialPayment] = useState(0);
