@@ -8,6 +8,7 @@ import { SubscriptionCard } from './components/SubscriptionCard';
 import { MetricCard } from './components/MetricCard';
 import { ChartComponent } from './components/Chart';
 import { DecompositionCard } from './components/DecompositionCard';
+import { PrintButton } from './components/PrintButton';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 function App() {
@@ -59,23 +60,32 @@ function App() {
   const tvaLabel = clientType === 'Particulier' ? 'TTC' : 'HT';
   const showHT = clientType === 'Particulier';
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#13A3AC] to-[#3CAE68] py-6 px-4">
-      <div className="max-w-[960px] mx-auto bg-white rounded-2xl p-8 shadow-lg">
-        <div className="flex items-center gap-4 mb-6">
-          <img src="/03.jpg" alt="Sunlib Logo" className="w-16 h-16 object-contain" />
-          <div>
-            <h1 className="text-xl font-semibold mb-1 bg-gradient-to-r from-[#13A3AC] to-[#60B830] bg-clip-text text-transparent">
-              Calculatrice SunLib
-            </h1>
-            <p className="text-[13px] text-gray-500">Comparez les 3 scénarios d'abonnement sur 25 ans</p>
+      <div className="max-w-[960px] mx-auto bg-white rounded-2xl p-8 shadow-lg print-container">
+        <div className="flex items-center justify-between gap-4 mb-6 print-header">
+          <div className="flex items-center gap-4">
+            <img src="/03.jpg" alt="Sunlib Logo" className="w-16 h-16 object-contain" />
+            <div>
+              <h1 className="text-xl font-semibold mb-1 bg-gradient-to-r from-[#13A3AC] to-[#60B830] bg-clip-text text-transparent">
+                Calculatrice SunLib
+              </h1>
+              <p className="text-[13px] text-gray-500">Comparez les 3 scénarios d'abonnement sur 25 ans</p>
+            </div>
+          </div>
+          <div className="print-hide">
+            <PrintButton onClick={handlePrint} />
           </div>
         </div>
 
-        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5">
+        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title">
           Profil client & contrat
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4 print-section">
           <div>
             <div className="text-xs text-gray-500 mb-1.5">Type de client</div>
             <div className="flex gap-1.5">
@@ -95,10 +105,10 @@ function App() {
           </div>
         </div>
 
-        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5">
+        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title">
           Installation photovoltaïque
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4 print-section">
           <Slider
             label="Prix installation PV (HT)"
             value={installPrice}
@@ -201,10 +211,10 @@ function App() {
           </div>
         )}
 
-        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5">
+        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title">
           Abonnements calculés
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 print-section">
           <SubscriptionCard
             title="Abonnement PV mensuel"
             subscription={results.subscriptionPV}
@@ -234,10 +244,10 @@ function App() {
           </span>
         </div>
 
-        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5">
+        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title">
           Paramètres rentabilité client
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4 print-section">
           <Slider
             label="Consommation annuelle"
             value={annualConsumption}
@@ -280,7 +290,7 @@ function App() {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-5 print-section">
           <MetricCard
             title="PV + Batt. Virtuelle"
             totalSavings={results.scenarioBV.totalSavings}
@@ -308,7 +318,7 @@ function App() {
           </div>
         )}
 
-        <div className="flex gap-1.5 mb-2.5">
+        <div className="flex gap-1.5 mb-2.5 print-hide">
           <button
             onClick={() => setChartMode('cumul')}
             className={`px-3 py-1 text-xs border rounded-lg transition-all ${
@@ -331,7 +341,7 @@ function App() {
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-3.5 text-xs text-gray-500 mb-2.5">
+        <div className="flex flex-wrap gap-3.5 text-xs text-gray-500 mb-2.5 print-section">
           <button
             onClick={() => toggleDataset('bv')}
             className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!visibleDatasets.bv ? 'opacity-35' : ''}`}
@@ -360,20 +370,22 @@ function App() {
           </span>
         </div>
 
-        <ChartComponent
-          mode={chartMode}
-          duration={duration}
-          scenarioBV={results.scenarioBV}
-          scenarioPV={results.scenarioPV}
-          scenarioBP={results.scenarioBP}
-          hasBattery={hasBattery}
-          visibleDatasets={visibleDatasets}
-        />
+        <div className="print-chart">
+          <ChartComponent
+            mode={chartMode}
+            duration={duration}
+            scenarioBV={results.scenarioBV}
+            scenarioPV={results.scenarioPV}
+            scenarioBP={results.scenarioBP}
+            hasBattery={hasBattery}
+            visibleDatasets={visibleDatasets}
+          />
+        </div>
 
-        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2.5">
+        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2.5 print-section-title print-page-break">
           Décomposition des économies — année 1
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 print-section">
           <DecompositionCard
             title="PV + Batt. Virtuelle"
             color="#13A3AC"
@@ -405,8 +417,11 @@ function App() {
           />
         </div>
 
-        <p className="text-[11px] text-gray-400 text-center mt-4">
+        <p className="text-[11px] text-gray-400 text-center mt-4 print-footer">
           Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Revente surplus 0,04 €/kWh
+        </p>
+        <p className="text-[11px] text-gray-400 text-center mt-2 print-footer">
+          Document généré par Calculatrice SunLib - {new Date().toLocaleDateString('fr-FR')}
         </p>
       </div>
     </div>
