@@ -84,6 +84,7 @@ function App() {
             max={50000}
             step={100}
             onChange={setInstallPrice}
+            suffix="€"
           />
           <Slider
             label="Prix batterie physique (HT)"
@@ -93,6 +94,7 @@ function App() {
             max={15000}
             step={100}
             onChange={setBatteryPrice}
+            suffix="€"
           />
           <Slider
             label="Puissance crête"
@@ -102,6 +104,7 @@ function App() {
             max={36}
             step={0.5}
             onChange={setPeakPower}
+            suffix="kWc"
           />
           <Slider
             label="Versement initial (HT)"
@@ -111,6 +114,7 @@ function App() {
             max={10000}
             step={100}
             onChange={setInitialPayment}
+            suffix="€"
           />
         </div>
 
@@ -182,6 +186,7 @@ function App() {
             max={20000}
             step={500}
             onChange={setAnnualConsumption}
+            suffix="kWh"
           />
           <Slider
             label="Productible PVGIS / kWc"
@@ -191,6 +196,7 @@ function App() {
             max={1500}
             step={10}
             onChange={setPvgisProduction}
+            suffix="kWh"
           />
           <Slider
             label="Prix moyen kWh client"
@@ -200,6 +206,7 @@ function App() {
             max={0.30}
             step={0.005}
             onChange={setAvgKwhPrice}
+            suffix="€"
           />
           <Slider
             label="Taux autoconso directe"
@@ -209,6 +216,7 @@ function App() {
             max={0.80}
             step={0.05}
             onChange={setAutoConsoRate}
+            suffix="%"
           />
         </div>
 
@@ -327,7 +335,7 @@ function App() {
         </div>
 
         <p className="text-[11px] text-gray-400 text-center mt-4">
-          Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Dégradation PV −0,459 %/an · Revente surplus 0,04 €/kWh
+          Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Revente surplus 0,04 €/kWh
         </p>
       </div>
     </div>

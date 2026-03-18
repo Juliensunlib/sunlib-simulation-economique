@@ -68,15 +68,20 @@ export function ChartComponent({ mode, duration, scenarioBV, scenarioPV, scenari
       ctx.beginPath();
       ctx.moveTo(xPos, y.top);
       ctx.lineTo(xPos, y.bottom);
-      ctx.strokeStyle = 'rgba(100,100,100,0.6)';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = 'rgba(220,60,60,0.8)';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([8, 5]);
       ctx.stroke();
       ctx.setLineDash([]);
-      ctx.fillStyle = 'rgba(80,80,80,0.8)';
-      ctx.font = '11px Arial';
-      ctx.textAlign = 'left';
-      ctx.fillText('Fin contrat', xPos + 4, y.top + 14);
+
+      ctx.fillStyle = 'rgba(220,60,60,0.9)';
+      ctx.font = 'bold 12px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('FIN DE CONTRAT', xPos, y.top + 15);
+
+      ctx.font = '10px Arial';
+      ctx.fillStyle = 'rgba(100,100,100,0.7)';
+      ctx.fillText('(après: sans abonnement)', xPos, y.top + 30);
       ctx.restore();
     }
   };
