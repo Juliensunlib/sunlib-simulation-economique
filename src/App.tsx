@@ -63,7 +63,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-[#13A3AC] to-[#3CAE68] py-6 px-4">
       <div className="max-w-[960px] mx-auto bg-white rounded-2xl p-8 shadow-lg">
         <div className="flex items-center gap-4 mb-6">
-          <img src="/01.jpg" alt="Sunlib Logo" className="w-16 h-16 object-contain" />
+          <img src="/03.jpg" alt="Sunlib Logo" className="w-16 h-16 object-contain" />
           <div>
             <h1 className="text-xl font-semibold mb-1 bg-gradient-to-r from-[#13A3AC] to-[#60B830] bg-clip-text text-transparent">
               Calculatrice SunLib
