@@ -105,7 +105,7 @@ function App() {
             displayValue={formatNumber(installPrice) + ' €'}
             min={3000}
             max={500000}
-            step={1000}
+            step={100}
             onChange={setInstallPrice}
             suffix="€"
           />
