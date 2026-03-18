@@ -71,7 +71,7 @@ function App() {
           <div className="flex items-center gap-4">
             <img src="/03.jpg" alt="Sunlib Logo" className="w-16 h-16 object-contain" />
             <div>
-              <h1 className="text-xl font-semibold mb-1 bg-gradient-to-r from-[#13A3AC] to-[#60B830] bg-clip-text text-transparent">
+              <h1 className="text-xl font-semibold mb-1 text-[#13A3AC]">
                 Calculatrice SunLib
               </h1>
               <p className="text-[13px] text-gray-500">Comparez les 3 scénarios d'abonnement sur 25 ans</p>
