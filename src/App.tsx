@@ -114,8 +114,8 @@ function App() {
             value={peakPower}
             displayValue={peakPower + ' kWc'}
             min={1}
-            max={200}
-            step={0.5}
+            max={500}
+            step={1}
             onChange={setPeakPower}
             suffix="kWc"
           />
