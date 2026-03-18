@@ -63,17 +63,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-[#13A3AC] to-[#3CAE68] py-6 px-4">
       <div className="max-w-[960px] mx-auto bg-white rounded-2xl p-8 shadow-lg">
         <div className="flex items-center gap-4 mb-6">
-          <svg viewBox="0 0 100 100" className="w-16 h-16" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="sunlibGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: '#13A3AC', stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: '#60B830', stopOpacity: 1 }} />
-              </linearGradient>
-            </defs>
-            <circle cx="50" cy="50" r="25" fill="url(#sunlibGradient)" />
-            <path d="M50 10 L50 20 M50 80 L50 90 M10 50 L20 50 M80 50 L90 50 M20 20 L28 28 M72 72 L80 80 M20 80 L28 72 M72 28 L80 20"
-                  stroke="url(#sunlibGradient)" strokeWidth="3" strokeLinecap="round" />
-          </svg>
+          <img src="/01.jpg" alt="Sunlib Logo" className="w-16 h-16 object-contain" />
           <div>
             <h1 className="text-xl font-semibold mb-1 bg-gradient-to-r from-[#13A3AC] to-[#60B830] bg-clip-text text-transparent">
               Calculatrice SunLib
