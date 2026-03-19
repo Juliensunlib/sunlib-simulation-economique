@@ -413,7 +413,7 @@ function App() {
             color="#60B830"
             breakdown={results.breakdownPV}
             labels={{
-              direct: 'Autoconso directe',
+              direct: `Autoconso directe (${Math.round(autoConsoRate * 100)}%)`,
               secondary: `Revente surplus (${tarifReventeDisplay} €/kWh)`
             }}
           />
