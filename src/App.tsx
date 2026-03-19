@@ -9,7 +9,7 @@ import { MetricCard } from './components/MetricCard';
 import { ChartComponent } from './components/Chart';
 import { DecompositionCard } from './components/DecompositionCard';
 import { PrintButton } from './components/PrintButton';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
 
 function App() {
   const [clientType, setClientType] = useState<ClientType>('Particulier');
@@ -32,6 +32,7 @@ function App() {
     pv: true,
     bp: true
   });
+  const [isPvSectionOpen, setIsPvSectionOpen] = useState(true);
 
   const toggleDataset = (dataset: 'bv' | 'pv' | 'bp') => {
     setVisibleDatasets(prev => ({
@@ -110,9 +111,14 @@ function App() {
           </div>
         </div>
 
-        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title">
-          Installation photovoltaïque
-        </div>
+        <button
+          onClick={() => setIsPvSectionOpen(!isPvSectionOpen)}
+          className="w-full flex items-center justify-between text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title hover:text-gray-700 transition-colors"
+        >
+          <span>Installation photovoltaïque</span>
+          {isPvSectionOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </button>
+        {isPvSectionOpen && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4 print-section">
           <Slider
             label="Prix installation PV (HT)"
@@ -167,7 +173,9 @@ function App() {
             suffix="€"
           />
         </div>
+        )}
 
+        {isPvSectionOpen && (
         <div className="mb-4">
           <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-0 mb-2.5">
             Durée abonnement PV
@@ -183,8 +191,9 @@ function App() {
             ))}
           </div>
         </div>
+        )}
 
-        {hasBattery && (
+        {isPvSectionOpen && hasBattery && (
           <div className="mb-4">
             <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-0 mb-2.5">
               Durée abonnement Batterie
