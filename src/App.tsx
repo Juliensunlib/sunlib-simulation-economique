@@ -423,9 +423,10 @@ function App() {
               color="#FF9800"
               breakdown={results.breakdownBP}
               labels={{
-                direct: `Autoconso directe (${Math.round((autoConsoRate + batteryAutoConsoBoost) * 100)}%)`,
+                direct: `Autoconso directe (${Math.round(autoConsoRate * 100)}%)`,
                 secondary: `Revente surplus (${tarifReventeDisplay} €/kWh)`,
-                battery: true
+                battery: true,
+                batteryBoostPercent: `+${Math.round(batteryAutoConsoBoost * 100)}%`
               }}
             />
           )}

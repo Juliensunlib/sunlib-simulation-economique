@@ -10,6 +10,7 @@ interface DecompositionCardProps {
     secondary: string;
     subscription?: boolean;
     battery?: boolean;
+    batteryBoostPercent?: string;
   };
   dimmed?: boolean;
 }
@@ -26,9 +27,9 @@ export function DecompositionCard({ title, color, breakdown, labels, dimmed = fa
         <span className="text-[#1D9E75]">{formatSavings(breakdown.directConsumption)}</span>
       </div>
 
-      {breakdown.batteryBoostConsumption !== undefined && breakdown.batteryBoostConsumption > 0 && (
+      {breakdown.batteryBoostConsumption !== undefined && breakdown.batteryBoostConsumption > 0 && labels.batteryBoostPercent && (
         <div className="flex justify-between text-xs py-1 border-b border-gray-200">
-          <span>Gain autoconso batterie</span>
+          <span>Gain autoconso batterie ({labels.batteryBoostPercent})</span>
           <span className="text-[#1D9E75]">{formatSavings(breakdown.batteryBoostConsumption)}</span>
         </div>
       )}
