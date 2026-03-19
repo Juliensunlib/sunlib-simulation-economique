@@ -23,10 +23,19 @@ const TARIFS = [0.194, 0.20758, 0.22834, 0.24432, 0.25654, 0.26936, 0.28283, 0.2
 
 const PERTE = 0.00459;
 const EVO_ABO = 0.015;
-const TARIF_REVENTE = 0.04;
 const FRAIS_BV_KWH = 0.10;
 const TVA = 1.20;
 const DUREE_CHART = 25;
+
+function getTarifRevente(peakPower: number): number {
+  if (peakPower < 9) {
+    return 0.0400;
+  } else if (peakPower <= 100) {
+    return 0.0536;
+  } else {
+    return 0.0400;
+  }
+}
 
 function getTaux(duration: number, peakPower: number, isFixe: boolean): number {
   const idx = Math.floor((peakPower - 2) / 0.5);
@@ -103,6 +112,7 @@ export function calculateResults(params: SimulatorParams): Results {
 
   const prod0 = peakPower * pvgisProduction;
   const scale = avgKwhPrice / 0.194;
+  const tarifRevente = getTarifRevente(peakPower);
 
   const scenarioBV: ScenarioResult = { totalSavings: 0, breakEvenYear: null, yearlyData: [], cumulativeData: [], colors: [] };
   const scenarioPV: ScenarioResult = { totalSavings: 0, breakEvenYear: null, yearlyData: [], cumulativeData: [], colors: [] };
@@ -138,13 +148,13 @@ export function calculateResults(params: SimulatorParams): Results {
       const dir_pv = Math.min(prod * autoConsoRate, annualConsumption);
       const sur_pv = Math.max(0, prod - dir_pv);
       const eco_dir_pv = dir_pv * tarif;
-      const eco_rev_pv = sur_pv * TARIF_REVENTE;
+      const eco_rev_pv = sur_pv * tarifRevente;
       const net_pv = eco_dir_pv + eco_rev_pv - abo_pv_ann;
 
       const dir_bp = Math.min(prod * 0.65, annualConsumption);
       const sur_bp = Math.max(0, prod - dir_bp);
       const eco_dir_bp = dir_bp * tarif;
-      const eco_rev_bp = sur_bp * TARIF_REVENTE;
+      const eco_rev_bp = sur_bp * tarifRevente;
       const net_bp = eco_dir_bp + eco_rev_bp - abo_pv_ann - abo_bp_ann;
 
       cumBV += net_bv;

@@ -60,6 +60,9 @@ function App() {
   const tvaLabel = clientType === 'Particulier' ? 'TTC' : 'HT';
   const showHT = clientType === 'Particulier';
 
+  const tarifRevente = peakPower < 9 ? 0.0400 : peakPower <= 100 ? 0.0536 : 0.0400;
+  const tarifReventeDisplay = tarifRevente.toFixed(4).replace('.', ',');
+
   const handlePrint = () => {
     window.print();
   };
@@ -403,7 +406,7 @@ function App() {
             breakdown={results.breakdownPV}
             labels={{
               direct: 'Autoconso directe',
-              secondary: 'Revente surplus (0,04 €/kWh)'
+              secondary: `Revente surplus (${tarifReventeDisplay} €/kWh)`
             }}
           />
           {hasBattery && (
@@ -413,7 +416,7 @@ function App() {
               breakdown={results.breakdownBP}
               labels={{
                 direct: 'Autoconso directe (65%)',
-                secondary: 'Revente surplus (0,04 €/kWh)',
+                secondary: `Revente surplus (${tarifReventeDisplay} €/kWh)`,
                 battery: true
               }}
             />
@@ -421,7 +424,7 @@ function App() {
         </div>
 
         <p className="text-[11px] text-gray-400 text-center mt-4 print-footer">
-          Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Revente surplus 0,04 €/kWh
+          Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Revente surplus {tarifReventeDisplay} €/kWh
         </p>
         <p className="text-[11px] text-gray-400 text-center mt-2 print-footer">
           Document généré par Calculatrice SunLib - {new Date().toLocaleDateString('fr-FR')}
