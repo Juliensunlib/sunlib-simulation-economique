@@ -363,7 +363,7 @@ function App() {
             className={`flex items-center gap-1.5 cursor-pointer hover:opacity-75 transition-opacity ${!hasBattery || !visibleDatasets.bp ? 'opacity-35' : ''}`}
             disabled={!hasBattery}
           >
-            <span className="w-3 h-3 rounded bg-[#0EA3B4] flex-shrink-0"></span>
+            <span className="w-3 h-3 rounded bg-[#FF9800] flex-shrink-0"></span>
             PV + Batt. Physique
           </button>
           <span className="flex items-center gap-1.5">
@@ -409,7 +409,7 @@ function App() {
           {hasBattery && (
             <DecompositionCard
               title="PV + Batt. Physique"
-              color="#0EA3B4"
+              color="#FF9800"
               breakdown={results.breakdownBP}
               labels={{
                 direct: 'Autoconso directe (65%)',

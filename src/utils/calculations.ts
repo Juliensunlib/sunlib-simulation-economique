@@ -116,7 +116,7 @@ export function calculateResults(params: SimulatorParams): Results {
 
   const COL_BV = 'rgba(19,163,172,0.85)', COL_BV_POST = 'rgba(19,163,172,0.28)';
   const COL_PV = 'rgba(96,184,48,0.85)', COL_PV_POST = 'rgba(96,184,48,0.28)';
-  const COL_BP = 'rgba(14,163,180,0.85)', COL_BP_POST = 'rgba(14,163,180,0.28)';
+  const COL_BP = 'rgba(255,152,0,0.85)', COL_BP_POST = 'rgba(255,152,0,0.28)';
 
   if (!outOfRange && subscriptionPV) {
     for (let y = 1; y <= DUREE_CHART; y++) {
