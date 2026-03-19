@@ -162,9 +162,7 @@ export function calculateResults(params: SimulatorParams): Results {
       const eco_dir_bv = dir_bv * tarif;
       const eco_bv_net = sto_bv * (tarif - FRAIS_BV_KWH);
       // Pas de prime d'investissement pour la batterie virtuelle
-      // Pour la batterie virtuelle, majoration de 20% de l'abonnement pour les Particuliers
-      const abo_bv_ann = inContract ? abo_pv_ann * (clientType === 'Particulier' ? 1.2 : 1.0) : 0;
-      const net_bv = eco_dir_bv + eco_bv_net - abo_bv_ann;
+      const net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
 
       const dir_pv = Math.min(prod * autoConsoRate, annualConsumption);
       const sur_pv = prod * (1 - autoConsoRate);
@@ -215,7 +213,7 @@ export function calculateResults(params: SimulatorParams): Results {
         breakdownBV = {
           directConsumption: eco_dir_bv,
           virtualBatteryOrResale: eco_bv_net,
-          subscriptionCost: -abo_bv_ann,
+          subscriptionCost: -abo_pv_ann,
           batteryCost: 0,
           netSavings: net_bv
         };
