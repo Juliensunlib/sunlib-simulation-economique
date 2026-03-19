@@ -418,7 +418,7 @@ function App() {
         </div>
 
         <p className="text-[11px] text-gray-400 text-center mt-4 print-footer">
-          Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Revente surplus {tarifReventeDisplay} €/kWh · Batterie virtuelle : énergie stockée rachetée à 0,10 €/kWh hors frais annexe
+          Abonnement +1,5 %/an · Revente surplus {tarifReventeDisplay} €/kWh · Batterie virtuelle : énergie stockée rachetée à 0,10 €/kWh hors frais annexe
         </p>
       </div>
     </div>
