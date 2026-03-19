@@ -156,7 +156,7 @@ export function calculateResults(params: SimulatorParams): Results {
       const dir_bp_base = Math.min(prod * autoConsoRate, annualConsumption);
       const dir_bp_boost = Math.min(prod * batteryAutoConsoBoost, Math.max(0, annualConsumption - dir_bp_base));
       const dir_bp = dir_bp_base + dir_bp_boost;
-      const sur_bp = Math.max(0, prod - dir_bp);
+      const sur_bp = prod * Math.max(0, 1 - autoConsoWithBoost);
       const eco_dir_bp_base = dir_bp_base * tarif;
       const eco_dir_bp_boost = dir_bp_boost * tarif;
       const eco_dir_bp = eco_dir_bp_base + eco_dir_bp_boost;
