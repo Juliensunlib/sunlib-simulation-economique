@@ -214,7 +214,7 @@ function App() {
         <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title">
           Abonnements calculés
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 print-section">
+        <div className={`grid grid-cols-1 ${hasBattery ? 'md:grid-cols-2' : ''} gap-4 mb-4 print-section`}>
           <SubscriptionCard
             title="Abonnement PV mensuel"
             subscription={results.subscriptionPV}
@@ -223,18 +223,19 @@ function App() {
             showHT={showHT}
             outOfRange={results.outOfRange}
           />
-          <SubscriptionCard
-            title="Batt. Physique mensuel"
-            subscription={results.subscriptionBattery}
-            subtitle={
-              hasBattery && results.subscriptionBattery
-                ? `${formatNumber(results.subscriptionBattery.annual)} € · durée ${batteryDuration} ans`
-                : 'Aucune batterie physique'
-            }
-            tvaLabel={tvaLabel}
-            showHT={showHT}
-            dimmed={!hasBattery}
-          />
+          {hasBattery && (
+            <SubscriptionCard
+              title="Batt. Physique mensuel"
+              subscription={results.subscriptionBattery}
+              subtitle={
+                results.subscriptionBattery
+                  ? `${formatNumber(results.subscriptionBattery.annual)} € · durée ${batteryDuration} ans`
+                  : 'Aucune batterie physique'
+              }
+              tvaLabel={tvaLabel}
+              showHT={showHT}
+            />
+          )}
         </div>
 
         <div className="bg-[#edfaf4] border border-[#b6e8d0] rounded-xl px-3.5 py-2.5 text-xs text-[#0f6e56] mb-4 flex items-start gap-2">
@@ -290,7 +291,7 @@ function App() {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-5 print-section">
+        <div className={`grid grid-cols-1 ${hasBattery ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-2.5 mb-5 print-section`}>
           <MetricCard
             title="PV + Batt. Virtuelle"
             totalSavings={results.scenarioBV.totalSavings}
@@ -303,13 +304,14 @@ function App() {
             breakEvenYear={results.scenarioPV.breakEvenYear}
             duration={duration}
           />
-          <MetricCard
-            title="PV + Batt. Physique"
-            totalSavings={results.scenarioBP.totalSavings}
-            breakEvenYear={results.scenarioBP.breakEvenYear}
-            duration={duration}
-            dimmed={!hasBattery}
-          />
+          {hasBattery && (
+            <MetricCard
+              title="PV + Batt. Physique"
+              totalSavings={results.scenarioBP.totalSavings}
+              breakEvenYear={results.scenarioBP.breakEvenYear}
+              duration={duration}
+            />
+          )}
         </div>
 
         {duration < 25 && (
@@ -385,7 +387,7 @@ function App() {
         <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2.5 print-section-title print-page-break">
           Décomposition des économies — année 1
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 print-section">
+        <div className={`grid grid-cols-1 ${hasBattery ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-2.5 print-section`}>
           <DecompositionCard
             title="PV + Batt. Virtuelle"
             color="#13A3AC"
@@ -404,17 +406,18 @@ function App() {
               secondary: 'Revente surplus (0,04 €/kWh)'
             }}
           />
-          <DecompositionCard
-            title="PV + Batt. Physique"
-            color="#0EA3B4"
-            breakdown={results.breakdownBP}
-            labels={{
-              direct: 'Autoconso directe (65%)',
-              secondary: 'Revente surplus (0,04 €/kWh)',
-              battery: true
-            }}
-            dimmed={!hasBattery}
-          />
+          {hasBattery && (
+            <DecompositionCard
+              title="PV + Batt. Physique"
+              color="#0EA3B4"
+              breakdown={results.breakdownBP}
+              labels={{
+                direct: 'Autoconso directe (65%)',
+                secondary: 'Revente surplus (0,04 €/kWh)',
+                battery: true
+              }}
+            />
+          )}
         </div>
 
         <p className="text-[11px] text-gray-400 text-center mt-4 print-footer">
