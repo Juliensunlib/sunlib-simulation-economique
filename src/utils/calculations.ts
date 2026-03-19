@@ -163,9 +163,9 @@ export function calculateResults(params: SimulatorParams): Results {
       scenarioBP.cumulativeData.push(Math.round(cumBP));
       scenarioBP.colors.push(inContract ? COL_BP : COL_BP_POST);
 
-      if (scenarioBV.breakEvenYear === null && cumBV >= 0) scenarioBV.breakEvenYear = y;
-      if (scenarioPV.breakEvenYear === null && cumPV >= 0) scenarioPV.breakEvenYear = y;
-      if (scenarioBP.breakEvenYear === null && cumBP >= 0) scenarioBP.breakEvenYear = y;
+      if (scenarioBV.breakEvenYear === null && net_bv >= 0) scenarioBV.breakEvenYear = y;
+      if (scenarioPV.breakEvenYear === null && net_pv >= 0) scenarioPV.breakEvenYear = y;
+      if (scenarioBP.breakEvenYear === null && net_bp >= 0) scenarioBP.breakEvenYear = y;
 
       if (y === duration) {
         scenarioBV.totalSavings = cumBV;

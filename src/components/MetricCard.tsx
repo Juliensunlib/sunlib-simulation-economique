@@ -20,7 +20,7 @@ export function MetricCard({ title, totalSavings, breakEvenYear, duration, dimme
       <div className="text-xs text-gray-500 mt-0.5">À fin contrat (an {duration})</div>
       {breakEvenYear ? (
         <div className="inline-block text-[11px] px-2 py-0.5 rounded bg-[#edfaf4] text-[#0f6e56] mt-1.5">
-          Rentable an {breakEvenYear}
+          Rentable en année {breakEvenYear}
         </div>
       ) : (
         <div className="inline-block text-[11px] px-2 py-0.5 rounded bg-[#fdf0ec] text-[#D85A30] mt-1.5">
