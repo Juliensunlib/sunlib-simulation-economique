@@ -175,9 +175,8 @@ function App() {
         </div>
         )}
 
-        {isPvSectionOpen && (
         <div className="mb-4">
-          <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-0 mb-2.5">
+          <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5">
             Durée abonnement PV
           </div>
           <div className="grid grid-cols-4 gap-2 max-w-[380px]">
@@ -191,9 +190,8 @@ function App() {
             ))}
           </div>
         </div>
-        )}
 
-        {isPvSectionOpen && hasBattery && (
+        {hasBattery && (
           <div className="mb-4">
             <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-0 mb-2.5">
               Durée abonnement Batterie
