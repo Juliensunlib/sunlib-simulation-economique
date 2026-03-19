@@ -199,9 +199,14 @@ export function calculateResults(params: SimulatorParams): Results {
       scenarioBP.cumulativeData.push(Math.round(cumBP));
       scenarioBP.colors.push(inContract ? COL_BP : COL_BP_POST);
 
-      if (scenarioBV.breakEvenYear === null && cumBV >= 0) scenarioBV.breakEvenYear = y;
-      if (scenarioPV.breakEvenYear === null && cumPV >= 0) scenarioPV.breakEvenYear = y;
-      if (scenarioBP.breakEvenYear === null && cumBP >= 0) scenarioBP.breakEvenYear = y;
+      // Batterie virtuelle: rentabilité basée sur les économies annuelles
+      if (scenarioBV.breakEvenYear === null && net_bv >= 0) scenarioBV.breakEvenYear = y;
+
+      // PV seul: exclure année 2 (prime) et chercher première année avec économie annuelle positive
+      if (scenarioPV.breakEvenYear === null && y !== 2 && net_pv >= 0) scenarioPV.breakEvenYear = y;
+
+      // PV+ batterie physique: exclure année 2 (prime) et chercher première année avec économie annuelle positive
+      if (scenarioBP.breakEvenYear === null && y !== 2 && net_bp >= 0) scenarioBP.breakEvenYear = y;
 
       if (y === duration) {
         scenarioBV.totalSavings = cumBV;
