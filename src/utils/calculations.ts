@@ -161,8 +161,8 @@ export function calculateResults(params: SimulatorParams): Results {
       const sto_bv = Math.min(prod * (1 - autoConsoRate), annualConsumption - dir_bv);
       const eco_dir_bv = dir_bv * tarif;
       const eco_bv_net = sto_bv * (tarif - FRAIS_BV_KWH);
-      const prime_bv = (y === 2) ? primeInvestissement : 0;
-      const net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann + prime_bv;
+      // Pas de prime d'investissement pour la batterie virtuelle
+      const net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
 
       const dir_pv = Math.min(prod * autoConsoRate, annualConsumption);
       const sur_pv = prod * (1 - autoConsoRate);
