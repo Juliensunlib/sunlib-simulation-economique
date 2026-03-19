@@ -26,6 +26,13 @@ export function DecompositionCard({ title, color, breakdown, labels, dimmed = fa
         <span className="text-[#1D9E75]">{formatSavings(breakdown.directConsumption)}</span>
       </div>
 
+      {breakdown.batteryBoostConsumption !== undefined && breakdown.batteryBoostConsumption > 0 && (
+        <div className="flex justify-between text-xs py-1 border-b border-gray-200">
+          <span>Gain autoconso batterie</span>
+          <span className="text-[#1D9E75]">{formatSavings(breakdown.batteryBoostConsumption)}</span>
+        </div>
+      )}
+
       <div className="flex justify-between text-xs py-1 border-b border-gray-200">
         <span>{labels.secondary}</span>
         <span className="text-[#1D9E75]">{formatSavings(breakdown.virtualBatteryOrResale)}</span>

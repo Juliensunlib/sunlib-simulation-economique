@@ -37,6 +37,7 @@ export interface ScenarioResult {
 
 export interface YearBreakdown {
   directConsumption: number;
+  batteryBoostConsumption?: number;
   virtualBatteryOrResale: number;
   subscriptionCost: number;
   batteryCost: number;

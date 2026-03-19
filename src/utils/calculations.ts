@@ -153,9 +153,13 @@ export function calculateResults(params: SimulatorParams): Results {
       const net_pv = eco_dir_pv + eco_rev_pv - abo_pv_ann;
 
       const autoConsoWithBoost = Math.min(1.0, autoConsoRate + batteryAutoConsoBoost);
-      const dir_bp = Math.min(prod * autoConsoWithBoost, annualConsumption);
+      const dir_bp_base = Math.min(prod * autoConsoRate, annualConsumption);
+      const dir_bp_boost = Math.min(prod * batteryAutoConsoBoost, Math.max(0, annualConsumption - dir_bp_base));
+      const dir_bp = dir_bp_base + dir_bp_boost;
       const sur_bp = Math.max(0, prod - dir_bp);
-      const eco_dir_bp = dir_bp * tarif;
+      const eco_dir_bp_base = dir_bp_base * tarif;
+      const eco_dir_bp_boost = dir_bp_boost * tarif;
+      const eco_dir_bp = eco_dir_bp_base + eco_dir_bp_boost;
       const eco_rev_bp = sur_bp * tarifRevente;
       const net_bp = eco_dir_bp + eco_rev_bp - abo_pv_ann - abo_bp_ann;
 
@@ -201,7 +205,8 @@ export function calculateResults(params: SimulatorParams): Results {
           netSavings: net_pv
         };
         breakdownBP = {
-          directConsumption: eco_dir_bp,
+          directConsumption: eco_dir_bp_base,
+          batteryBoostConsumption: eco_dir_bp_boost,
           virtualBatteryOrResale: eco_rev_bp,
           subscriptionCost: -abo_pv_ann,
           batteryCost: -abo_bp_ann,
