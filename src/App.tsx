@@ -209,10 +209,10 @@ function App() {
           </div>
         )}
 
-        {hasBattery && batteryCapacity > 0 && (batteryPrice / batteryCapacity) > 1000 && (
+        {hasBattery && batteryCapacity > 0 && (batteryPrice / batteryCapacity) > 500 && (
           <div className="bg-[#fdf0ec] border border-[#f5c9b8] text-[#c04a20] rounded-xl px-3.5 py-2.5 text-xs mb-3 flex items-start gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-            <span>Prix de la batterie ({formatNumber(batteryPrice / batteryCapacity)} €/kWh) dépasse le maximum autorisé (1000 €/kWh)</span>
+            <span>Prix de la batterie ({formatNumber(batteryPrice / batteryCapacity)} €/kWh) dépasse le maximum autorisé (500 €/kWh)</span>
           </div>
         )}
 
