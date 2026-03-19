@@ -25,6 +25,7 @@ function App() {
   const [pvgisProduction, setPvgisProduction] = useState(1033);
   const [avgKwhPrice, setAvgKwhPrice] = useState(0.194);
   const [autoConsoRate, setAutoConsoRate] = useState(0.40);
+  const [batteryAutoConsoBoost, setBatteryAutoConsoBoost] = useState(0.10);
   const [chartMode, setChartMode] = useState<ChartMode>('cumul');
   const [visibleDatasets, setVisibleDatasets] = useState({
     bv: true,
@@ -52,7 +53,8 @@ function App() {
     annualConsumption,
     pvgisProduction,
     avgKwhPrice,
-    autoConsoRate
+    autoConsoRate,
+    batteryAutoConsoBoost
   };
 
   const results = useMemo(() => calculateResults(params), [params]);
@@ -286,6 +288,18 @@ function App() {
             onChange={setAutoConsoRate}
             suffix="%"
           />
+          {hasBattery && (
+            <Slider
+              label="Gain autoconso batterie"
+              value={batteryAutoConsoBoost}
+              displayValue={'+' + Math.round(batteryAutoConsoBoost * 100) + ' %'}
+              min={0.00}
+              max={0.20}
+              step={0.01}
+              onChange={setBatteryAutoConsoBoost}
+              suffix="%"
+            />
+          )}
         </div>
 
         <div className={`grid grid-cols-1 ${hasBattery ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-2.5 mb-5 print-section`}>
@@ -409,7 +423,7 @@ function App() {
               color="#FF9800"
               breakdown={results.breakdownBP}
               labels={{
-                direct: 'Autoconso directe (65%)',
+                direct: `Autoconso directe (${Math.round((autoConsoRate + batteryAutoConsoBoost) * 100)}%)`,
                 secondary: `Revente surplus (${tarifReventeDisplay} €/kWh)`,
                 battery: true
               }}

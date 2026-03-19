@@ -18,6 +18,7 @@ export interface SimulatorParams {
   pvgisProduction: number;
   avgKwhPrice: number;
   autoConsoRate: number;
+  batteryAutoConsoBoost: number;
 }
 
 export interface Subscription {

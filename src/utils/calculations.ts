@@ -74,7 +74,8 @@ export function calculateResults(params: SimulatorParams): Results {
     annualConsumption,
     pvgisProduction,
     avgKwhPrice,
-    autoConsoRate
+    autoConsoRate,
+    batteryAutoConsoBoost
   } = params;
 
   const tvaCoef = clientType === 'Particulier' ? TVA : 1.0;
@@ -151,7 +152,8 @@ export function calculateResults(params: SimulatorParams): Results {
       const eco_rev_pv = sur_pv * tarifRevente;
       const net_pv = eco_dir_pv + eco_rev_pv - abo_pv_ann;
 
-      const dir_bp = Math.min(prod * 0.65, annualConsumption);
+      const autoConsoWithBoost = Math.min(1.0, autoConsoRate + batteryAutoConsoBoost);
+      const dir_bp = Math.min(prod * autoConsoWithBoost, annualConsumption);
       const sur_bp = Math.max(0, prod - dir_bp);
       const eco_dir_bp = dir_bp * tarif;
       const eco_rev_bp = sur_bp * tarifRevente;
