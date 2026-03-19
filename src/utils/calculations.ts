@@ -133,7 +133,7 @@ export function calculateResults(params: SimulatorParams): Results {
     for (let y = 1; y <= DUREE_CHART; y++) {
       const ti = Math.min(y, 25) - 1;
       const tarif = TARIFS[ti] * scale;
-      const prod = prod0;
+      const prod = prod0 * Math.pow(1 - PERTE, y - 1);
       const inContract = y <= duration;
       const abo_pv_ann = inContract ? subscriptionPV.monthly * 12 * Math.pow(1 + EVO_ABO, y - 1) : 0;
       const abo_bp_ann = hasBattery && subscriptionBattery && y <= batteryDuration
