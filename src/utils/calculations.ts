@@ -129,20 +129,11 @@ export function calculateResults(params: SimulatorParams): Results {
         ? subscriptionBattery.monthly * tvaCoef * 12 * Math.pow(1 + EVO_ABO, y - 1)
         : 0;
 
-      let eco_dir_bv: number, eco_bv_net: number, net_bv: number;
-      if (inContract) {
-        const dir_bv = Math.min(prod * autoConsoRate, annualConsumption);
-        const sto_bv = Math.min(prod * (1 - autoConsoRate), annualConsumption - dir_bv);
-        eco_dir_bv = dir_bv * tarif;
-        eco_bv_net = sto_bv * (tarif - FRAIS_BV_KWH);
-        net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
-      } else {
-        const dir_bv2 = Math.min(prod * autoConsoRate, annualConsumption);
-        const sur_bv2 = Math.max(0, prod - dir_bv2);
-        eco_dir_bv = dir_bv2 * tarif;
-        eco_bv_net = sur_bv2 * TARIF_REVENTE;
-        net_bv = eco_dir_bv + eco_bv_net;
-      }
+      const dir_bv = Math.min(prod * autoConsoRate, annualConsumption);
+      const sto_bv = Math.min(prod * (1 - autoConsoRate), annualConsumption - dir_bv);
+      const eco_dir_bv = dir_bv * tarif;
+      const eco_bv_net = sto_bv * (tarif - FRAIS_BV_KWH);
+      const net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
 
       const dir_pv = Math.min(prod * autoConsoRate, annualConsumption);
       const sur_pv = Math.max(0, prod - dir_pv);
