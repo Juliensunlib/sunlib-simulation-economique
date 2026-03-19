@@ -147,7 +147,7 @@ export function calculateResults(params: SimulatorParams): Results {
       const net_bv = eco_dir_bv + eco_bv_net - abo_pv_ann;
 
       const dir_pv = Math.min(prod * autoConsoRate, annualConsumption);
-      const sur_pv = Math.max(0, prod - dir_pv);
+      const sur_pv = prod * (1 - autoConsoRate);
       const eco_dir_pv = dir_pv * tarif;
       const eco_rev_pv = sur_pv * tarifRevente;
       const net_pv = eco_dir_pv + eco_rev_pv - abo_pv_ann;
