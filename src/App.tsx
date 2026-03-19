@@ -241,12 +241,6 @@ function App() {
           )}
         </div>
 
-        <div className="bg-[#edfaf4] border border-[#b6e8d0] rounded-xl px-3.5 py-2.5 text-xs text-[#0f6e56] mb-4 flex items-start gap-2">
-          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" />
-          <span>
-            <strong>Batterie Virtuelle</strong> : énergie stockée rachetée à <strong>0,10 €/kWh</strong> vs prix réseau → économie nette garantie, sans frais fixes.
-          </span>
-        </div>
 
         <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mt-5 mb-2.5 print-section-title">
           Paramètres rentabilité client
@@ -424,10 +418,7 @@ function App() {
         </div>
 
         <p className="text-[11px] text-gray-400 text-center mt-4 print-footer">
-          Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Revente surplus {tarifReventeDisplay} €/kWh
-        </p>
-        <p className="text-[11px] text-gray-400 text-center mt-2 print-footer">
-          Document généré par Calculatrice SunLib - {new Date().toLocaleDateString('fr-FR')}
+          Graphique toujours sur 25 ans · Après fin de contrat : autoconso pure sans abonnement · Évolution TRVE réelle · Abonnement +1,5 %/an · Revente surplus {tarifReventeDisplay} €/kWh · Batterie virtuelle : énergie stockée rachetée à 0,10 €/kWh hors frais annexe
         </p>
       </div>
     </div>
