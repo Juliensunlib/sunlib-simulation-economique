@@ -465,7 +465,7 @@ function App() {
         ) : null}
 
         <p className="text-[11px] text-gray-400 text-center mt-4 print-footer">
-          Abonnement +1,5 %/an · Revente surplus {tarifReventeDisplay} €/kWh · Batterie virtuelle : énergie stockée rachetée à 0,10 €/kWh hors frais annexe · Prime à l'autoconsommation intégrée en année 2
+          Abonnement +1,5 %/an · Revente surplus {tarifReventeDisplay} €/kWh{showVirtualBattery && visibleDatasets.bv ? ' · Batterie virtuelle : énergie stockée rachetée à 0,10 €/kWh hors frais annexe' : ''} · Prime à l'autoconsommation intégrée en année 2
         </p>
       </div>
     </div>
