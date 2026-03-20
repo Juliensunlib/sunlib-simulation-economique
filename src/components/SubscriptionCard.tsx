@@ -14,7 +14,6 @@ interface SubscriptionCardProps {
 export function SubscriptionCard({
   title,
   subscription,
-  subtitle,
   tvaLabel,
   showHT,
   outOfRange = false,
@@ -40,9 +39,6 @@ export function SubscriptionCard({
               {formatCurrency(subscription.monthlyHT)} HT/mois
             </div>
           )}
-          <div className="text-[11px] text-gray-400">
-            {subtitle || `${formatNumber(subscription.annual)} €/an`}
-          </div>
         </>
       ) : (
         <div className="text-lg font-semibold text-gray-900">—</div>

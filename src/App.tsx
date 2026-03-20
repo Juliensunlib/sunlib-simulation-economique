@@ -237,7 +237,6 @@ function App() {
           <SubscriptionCard
             title="Abonnement PV mensuel"
             subscription={results.subscriptionPV}
-            subtitle="Identique pour PV Seul et PV+BV"
             tvaLabel={tvaLabel}
             showHT={showHT}
             outOfRange={results.outOfRange}
@@ -246,11 +245,6 @@ function App() {
             <SubscriptionCard
               title="Batt. Physique mensuel"
               subscription={results.subscriptionBattery}
-              subtitle={
-                results.subscriptionBattery
-                  ? `${formatNumber(results.subscriptionBattery.annual)} € · durée ${batteryDuration} ans`
-                  : 'Aucune batterie physique'
-              }
               tvaLabel={tvaLabel}
               showHT={showHT}
             />
