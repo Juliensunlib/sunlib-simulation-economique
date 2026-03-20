@@ -98,6 +98,7 @@ export function calculateResults(params: SimulatorParams): Results {
   const hasBattery = batteryPrice > 0;
   const priceLimit = getPriceLimit(peakPower);
   const outOfRange = installPrice > priceLimit;
+  const isVirtualBatteryEligible = peakPower <= 36;
 
   const MAX_PRICE_PER_KWH = 1000;
   const pricePerKwh = batteryCapacity > 0 ? batteryPrice / batteryCapacity : 0;
@@ -107,7 +108,8 @@ export function calculateResults(params: SimulatorParams): Results {
   let subscriptionBattery: Subscription | null = null;
 
   if (!outOfRange) {
-    const capital = Math.max(0, installPrice - initialPayment);
+    const initialPaymentHT = clientType === 'Particulier' ? initialPayment / TVA : initialPayment;
+    const capital = Math.max(0, installPrice - initialPaymentHT);
     const ratePV = getTaux(duration, peakPower, contractType === 'Fixe');
     const monthlyPV_HT = calculateMonthlyPayment(capital, ratePV, duration * 12);
     subscriptionPV = {
@@ -250,7 +252,8 @@ export function calculateResults(params: SimulatorParams): Results {
     breakdownBV,
     breakdownPV,
     breakdownBP,
-    outOfRange
+    outOfRange,
+    isVirtualBatteryEligible
   };
 }
 

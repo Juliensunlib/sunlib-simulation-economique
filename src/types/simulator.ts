@@ -54,4 +54,5 @@ export interface Results {
   breakdownPV: YearBreakdown;
   breakdownBP: YearBreakdown;
   outOfRange: boolean;
+  isVirtualBatteryEligible: boolean;
 }

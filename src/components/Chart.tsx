@@ -36,21 +36,21 @@ export function ChartComponent({ mode, duration, scenarioBV, scenarioPV, scenari
 
   const datasets = [];
 
-  if (visibleDatasets.bv) {
-    datasets.push({
-      label: 'PV+BV',
-      data: isCumulative ? scenarioBV.cumulativeData : scenarioBV.yearlyData,
-      backgroundColor: scenarioBV.colors,
-      borderRadius: 4,
-      borderSkipped: false as const
-    });
-  }
-
   if (visibleDatasets.pv) {
     datasets.push({
       label: 'PV Seul',
       data: isCumulative ? scenarioPV.cumulativeData : scenarioPV.yearlyData,
       backgroundColor: scenarioPV.colors,
+      borderRadius: 4,
+      borderSkipped: false as const
+    });
+  }
+
+  if (visibleDatasets.bv) {
+    datasets.push({
+      label: 'PV+BV',
+      data: isCumulative ? scenarioBV.cumulativeData : scenarioBV.yearlyData,
+      backgroundColor: scenarioBV.colors,
       borderRadius: 4,
       borderSkipped: false as const
     });
