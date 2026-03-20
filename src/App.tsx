@@ -20,7 +20,7 @@ function App() {
   const [batteryPrice, setBatteryPrice] = useState(0);
   const [batteryCapacity, setBatteryCapacity] = useState(5);
   const [peakPower, setPeakPower] = useState(3);
-  const [initialPayment, setInitialPayment] = useState(500);
+  const [initialPayment, setInitialPayment] = useState(0);
   const [annualConsumption, setAnnualConsumption] = useState(10000);
   const [pvgisProduction, setPvgisProduction] = useState(1033);
   const [avgKwhPrice, setAvgKwhPrice] = useState(0.194);
@@ -36,10 +36,10 @@ function App() {
 
   useEffect(() => {
     const minPayment = clientType === 'Particulier' ? 500 : 5000;
-    if (initialPayment < minPayment) {
+    if (initialPayment > 0 && initialPayment < minPayment) {
       setInitialPayment(minPayment);
     }
-  }, [clientType]);
+  }, [clientType, initialPayment]);
 
   const toggleDataset = (dataset: 'bv' | 'pv' | 'bp') => {
     setVisibleDatasets(prev => ({
@@ -173,7 +173,7 @@ function App() {
             label={`Versement initial (${tvaLabel})`}
             value={initialPayment}
             displayValue={formatNumber(initialPayment) + ' €'}
-            min={clientType === 'Particulier' ? 500 : 5000}
+            min={0}
             max={clientType === 'Particulier' ? 10000 : 50000}
             step={100}
             onChange={setInitialPayment}
@@ -425,17 +425,6 @@ function App() {
               Décomposition des économies — année 1
             </div>
             <div className={`grid grid-cols-1 ${(hasBattery && visibleDatasets.bp) && (showVirtualBattery && visibleDatasets.bv) ? 'md:grid-cols-3' : (hasBattery && visibleDatasets.bp) || (showVirtualBattery && visibleDatasets.bv) ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-2.5 print-section`}>
-              {showVirtualBattery && visibleDatasets.bv && (
-                <DecompositionCard
-                  title="PV + Batt. Virtuelle"
-                  color="#13A3AC"
-                  breakdown={results.breakdownBV}
-                  labels={{
-                    direct: `Autoconso directe (${Math.round(autoConsoRate * 100)}%)`,
-                    secondary: 'Énergie BV à 0,10 €/kWh'
-                  }}
-                />
-              )}
               {visibleDatasets.pv && (
                 <DecompositionCard
                   title="PV Seul"
@@ -444,6 +433,17 @@ function App() {
                   labels={{
                     direct: `Autoconso directe (${Math.round(autoConsoRate * 100)}%)`,
                     secondary: `Revente surplus (${tarifReventeDisplay} €/kWh)`
+                  }}
+                />
+              )}
+              {showVirtualBattery && visibleDatasets.bv && (
+                <DecompositionCard
+                  title="PV + Batt. Virtuelle"
+                  color="#13A3AC"
+                  breakdown={results.breakdownBV}
+                  labels={{
+                    direct: `Autoconso directe (${Math.round(autoConsoRate * 100)}%)`,
+                    secondary: 'Énergie BV à 0,10 €/kWh'
                   }}
                 />
               )}

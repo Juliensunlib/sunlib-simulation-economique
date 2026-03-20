@@ -108,7 +108,9 @@ export function calculateResults(params: SimulatorParams): Results {
   let subscriptionBattery: Subscription | null = null;
 
   if (!outOfRange) {
-    const initialPaymentHT = clientType === 'Particulier' ? initialPayment / TVA : initialPayment;
+    const minPayment = clientType === 'Particulier' ? 500 : 5000;
+    const validatedPayment = initialPayment > 0 && initialPayment < minPayment ? minPayment : initialPayment;
+    const initialPaymentHT = clientType === 'Particulier' ? validatedPayment / TVA : validatedPayment;
     const capital = Math.max(0, installPrice - initialPaymentHT);
     const ratePV = getTaux(duration, peakPower, contractType === 'Fixe');
     const monthlyPV_HT = calculateMonthlyPayment(capital, ratePV, duration * 12);
